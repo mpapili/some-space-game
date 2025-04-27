@@ -107,20 +107,9 @@ function createSolarSystem() {
                 // This is a simplified version without proper UV mapping
             }
             
-            // Add rings for Saturn
-            if (name === 'saturn') {
-                const ringGeometry = new THREE.RingGeometry(
-                    data.radius * 1.5,
-                    data.radius * 2.5,
-                    32
-                );
-                const ringMaterial = new THREE.MeshPhongMaterial({
-                    color: data.ringColor,
-                    side: THREE.DoubleSide
-                });
-                const rings = new THREE.Mesh(ringGeometry, ringMaterial);
-                rings.rotation.x = Math.PI / 2;
-                planet.mesh.add(rings);
+            // Add any special planet features here
+            if (name === 'jupiter') {
+                // Jupiter-specific features could go here
             }
         }
         const planet = new THREE.Mesh(planetGeo, planetMat);
@@ -134,6 +123,24 @@ function createSolarSystem() {
         // Add tilt
         planet.rotation.x = data.tilt;
         
+        // Add rings for Saturn after creating the planet
+        if (name === 'saturn') {
+            const ringGeometry = new THREE.RingGeometry(
+                data.radius * 1.5,
+                data.radius * 2.5,
+                32
+            );
+            const ringMaterial = new THREE.MeshPhongMaterial({
+                color: data.ringColor,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.8
+            });
+            const rings = new THREE.Mesh(ringGeometry, ringMaterial);
+            rings.rotation.x = Math.PI / 2;
+            planet.add(rings);
+        }
+
         scene.add(planet);
         planets[name] = {
             mesh: planet,
