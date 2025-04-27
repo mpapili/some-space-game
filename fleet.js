@@ -57,7 +57,25 @@ class Fleet {
         if (this.orbitingPlanet) {
             // If orbiting a planet, follow its position
             const planet = planets[this.orbitingPlanet];
-            this.fleetMesh.position.copy(planet.mesh.position);
+            
+            // Keep updating position to match planet's orbit
+            this.targetPosition = planet.mesh.position.clone();
+            
+            // Move toward planet
+            const direction = new THREE.Vector3().subVectors(
+                this.targetPosition, 
+                this.fleetMesh.position
+            ).normalize();
+            
+            // Move fleet toward planet
+            this.fleetMesh.position.add(
+                direction.multiplyScalar(this.speed * 2) // Faster when orbiting
+            );
+            
+            // Snap to orbit if close enough
+            if (this.fleetMesh.position.distanceTo(this.targetPosition) < 5) {
+                this.fleetMesh.position.copy(this.targetPosition);
+            }
             
             // Add swarm motion while orbiting
             const time = Date.now() * 0.001;

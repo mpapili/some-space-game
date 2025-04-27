@@ -27,3 +27,28 @@ body {
     outline: 2px solid rgba(255,255,255,0.8);
     outline-offset: 5px;
 }
+
+#contextMenu {
+    position: absolute;
+    background-color: rgba(0,0,0,0.8);
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 5px 0;
+    color: white;
+    font-family: Arial, sans-serif;
+    min-width: 150px;
+    display: none;
+}
+
+.context-menu-item {
+    padding: 8px 15px;
+    cursor: pointer;
+}
+
+.context-menu-item:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+#contextMenu.active {
+    display: block;
+}

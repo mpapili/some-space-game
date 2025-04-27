@@ -40,6 +40,7 @@ function init() {
     window.addEventListener('resize', onWindowResize);
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('click', onClick);
+    document.addEventListener('contextmenu', onContextMenu);
     
     // Create player fleet
     fleet = new Fleet(scene);
@@ -190,20 +191,82 @@ function onMouseMove(event) {
     checkIntersection();
 }
 
-function onClick() {
-    const infoPanel = document.getElementById('infoPanel');
-    infoPanel.style.display = 'block';
+function onClick(event) {
+    if (event.button === 0) { // Left click
+        const infoPanel = document.getElementById('infoPanel');
+        infoPanel.style.display = 'block';
+        
+        // Set fleet target on click
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(scene.children);
+        
+        if (intersects.length > 0) {
+            fleet.setTarget(
+                intersects[0].point.x,
+                intersects[0].point.y,
+                intersects[0].point.z
+            );
+        }
+    }
+}
+
+function onContextMenu(event) {
+    event.preventDefault();
     
-    // Set fleet target on click
+    const contextMenu = document.getElementById('contextMenu');
+    contextMenu.style.display = 'none';
+    
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(scene.children);
     
     if (intersects.length > 0) {
-        fleet.setTarget(
-            intersects[0].point.x,
-            intersects[0].point.y,
-            intersects[0].point.z
-        );
+        const clickedObject = intersects[0].object;
+        
+        // Position the context menu
+        contextMenu.style.left = `${event.clientX}px`;
+        contextMenu.style.top = `${event.clientY}px`;
+        
+        // Set up menu items
+        const moveHere = document.getElementById('moveHere');
+        const orbitPlanet = document.getElementById('orbitPlanet');
+        
+        // Clear previous event listeners
+        moveHere.onclick = null;
+        orbitPlanet.onclick = null;
+        
+        if (planetData[clickedObject.name]) {
+            // Clicked on a planet
+            orbitPlanet.textContent = `Orbit ${clickedObject.name}`;
+            orbitPlanet.style.display = 'block';
+            
+            moveHere.onclick = () => {
+                fleet.setTarget(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+                contextMenu.style.display = 'none';
+            };
+            
+            orbitPlanet.onclick = () => {
+                fleet.setTarget(
+                    clickedObject.position.x,
+                    clickedObject.position.y,
+                    clickedObject.position.z
+                );
+                fleet.orbitingPlanet = clickedObject.name;
+                contextMenu.style.display = 'none';
+            };
+            
+            contextMenu.style.display = 'block';
+        } else {
+            // Clicked on empty space
+            orbitPlanet.style.display = 'none';
+            
+            moveHere.onclick = () => {
+                fleet.setTarget(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+                fleet.orbitingPlanet = null;
+                contextMenu.style.display = 'none';
+            };
+            
+            contextMenu.style.display = 'block';
+        }
     }
 }
 
