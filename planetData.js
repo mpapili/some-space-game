@@ -1,7 +1,9 @@
 const planetData = {
     sun: {
         radius: 20,
-        texture: 'https://threejs.org/examples/textures/planets/sun.jpg',
+        color: 0xffff00,
+        emissive: 0xffff33,
+        emissiveIntensity: 1,
         orbitRadius: 0,
         orbitSpeed: 0,
         tilt: 0,
@@ -10,7 +12,7 @@ const planetData = {
     },
     mercury: {
         radius: 3.2,
-        texture: 'https://threejs.org/examples/textures/planets/mercury.jpg',
+        color: 0xb5b5b5,
         orbitRadius: 40,
         orbitSpeed: 0.04,
         tilt: 0.1,
@@ -19,7 +21,7 @@ const planetData = {
     },
     venus: {
         radius: 6.0,
-        texture: 'https://threejs.org/examples/textures/planets/venus.jpg',
+        color: 0xe6b800,
         orbitRadius: 60,
         orbitSpeed: 0.015,
         tilt: 0.05,
@@ -37,7 +39,7 @@ const planetData = {
     },
     mars: {
         radius: 3.3,
-        texture: 'https://threejs.org/examples/textures/planets/mars.jpg',
+        color: 0xc1440e,
         orbitRadius: 100,
         orbitSpeed: 0.008,
         tilt: 0.44,
@@ -46,7 +48,8 @@ const planetData = {
     },
     jupiter: {
         radius: 11.2,
-        texture: 'https://threejs.org/examples/textures/planets/jupiter.jpg',
+        color: 0xc88b3a,
+        stripeColor: 0xb37d35,
         orbitRadius: 140,
         orbitSpeed: 0.002,
         tilt: 0.05,
@@ -55,7 +58,8 @@ const planetData = {
     },
     saturn: {
         radius: 9.5,
-        texture: 'https://threejs.org/examples/textures/planets/saturn.jpg',
+        color: 0xe3dccb,
+        ringColor: 0xc0ac8d,
         orbitRadius: 170,
         orbitSpeed: 0.0009,
         tilt: 0.47,
@@ -64,7 +68,7 @@ const planetData = {
     },
     uranus: {
         radius: 8.5,
-        texture: 'https://threejs.org/examples/textures/planets/uranus.jpg',
+        color: 0x8fd7d6,
         orbitRadius: 200,
         orbitSpeed: 0.0004,
         tilt: 1.43,
@@ -73,7 +77,7 @@ const planetData = {
     },
     neptune: {
         radius: 8.3,
-        texture: 'https://threejs.org/examples/textures/planets/neptune.jpg',
+        color: 0x3b5dcd,
         orbitRadius: 230,
         orbitSpeed: 0.0001,
         tilt: 0.72,

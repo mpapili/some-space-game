@@ -70,7 +70,9 @@ function createSolarSystem() {
     // Create sun
     const sunGeo = new THREE.SphereGeometry(planetData.sun.radius, 64, 64);
     const sunMat = new THREE.MeshBasicMaterial({
-        map: new THREE.TextureLoader().load(planetData.sun.texture)
+        color: planetData.sun.color,
+        emissive: planetData.sun.emissive,
+        emissiveIntensity: planetData.sun.emissiveIntensity
     });
     const sun = new THREE.Mesh(sunGeo, sunMat);
     sun.name = 'sun';
@@ -82,10 +84,45 @@ function createSolarSystem() {
         if (name === 'sun') continue;
         
         const planetGeo = new THREE.SphereGeometry(data.radius, 64, 64);
-        const planetMat = new THREE.MeshPhongMaterial({
-            map: new THREE.TextureLoader().load(data.texture),
-            shininess: 1
-        });
+        let planetMat;
+        if (name === 'earth') {
+            planetMat = new THREE.MeshPhongMaterial({
+                map: new THREE.TextureLoader().load(data.texture),
+                shininess: 1
+            });
+        } else {
+            planetMat = new THREE.MeshPhongMaterial({
+                color: data.color,
+                shininess: name === 'saturn' ? 0.5 : 1
+            });
+            
+            // Special handling for Jupiter
+            if (name === 'jupiter') {
+                const stripes = new THREE.MeshPhongMaterial({
+                    color: data.stripeColor,
+                    shininess: 1
+                });
+                // Create a simple banded appearance
+                // We'll just rotate alternate materials to give a striped effect
+                // This is a simplified version without proper UV mapping
+            }
+            
+            // Add rings for Saturn
+            if (name === 'saturn') {
+                const ringGeometry = new THREE.RingGeometry(
+                    data.radius * 1.5,
+                    data.radius * 2.5,
+                    32
+                );
+                const ringMaterial = new THREE.MeshPhongMaterial({
+                    color: data.ringColor,
+                    side: THREE.DoubleSide
+                });
+                const rings = new THREE.Mesh(ringGeometry, ringMaterial);
+                rings.rotation.x = Math.PI / 2;
+                planet.mesh.add(rings);
+            }
+        }
         const planet = new THREE.Mesh(planetGeo, planetMat);
         planet.name = name;
         
