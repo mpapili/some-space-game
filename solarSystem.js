@@ -1,4 +1,4 @@
-let scene, camera, renderer, controls;
+let scene, camera, renderer, controls, fleet;
 const planets = {};
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
@@ -40,6 +40,9 @@ function init() {
     window.addEventListener('resize', onWindowResize);
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('click', onClick);
+    
+    // Create player fleet
+    fleet = new Fleet(scene);
     
     // Start animation loop
     animate();
@@ -166,6 +169,9 @@ function animate() {
         planet.mesh.rotation.y += planet.data.rotationSpeed;
     }
     
+    // Update fleet movement
+    fleet.update();
+    
     controls.update();
     renderer.render(scene, camera);
 }
@@ -187,6 +193,18 @@ function onMouseMove(event) {
 function onClick() {
     const infoPanel = document.getElementById('infoPanel');
     infoPanel.style.display = 'block';
+    
+    // Set fleet target on click
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children);
+    
+    if (intersects.length > 0) {
+        fleet.setTarget(
+            intersects[0].point.x,
+            intersects[0].point.y,
+            intersects[0].point.z
+        );
+    }
 }
 
 function checkIntersection() {
