@@ -195,7 +195,7 @@ function checkIntersection() {
     
     // Reset all highlights
     scene.children.forEach(obj => {
-        if (obj instanceof THREE.Mesh) {
+        if (obj instanceof THREE.Mesh && obj.material.emissive) {
             obj.material.emissiveIntensity = 0;
             obj.material.emissive.setHex(0x000000);
         }
@@ -203,7 +203,7 @@ function checkIntersection() {
     
     if (intersects.length > 0) {
         const planet = intersects[0].object;
-        if (planetData[planet.name]) {
+        if (planetData[planet.name] && planet.material.emissive) {
             // Highlight planet
             planet.material.emissiveIntensity = 0.5;
             planet.material.emissive.setHex(0x888888);
